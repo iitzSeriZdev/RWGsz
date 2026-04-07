@@ -1,4 +1,5 @@
 ---
+<img width="838" height="685" alt="image" src="https://github.com/user-attachments/assets/010bcf7d-b00d-4047-953f-31460a7db9ca" />
 
 📌 🛡️ RWG SZ (Random Word Generator - SeriZ)
 
