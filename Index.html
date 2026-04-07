@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RWG SZ | تولیدکننده رشته امنیتی</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --accent: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Helvetica, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Card Style */
+        .main-card {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 480px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            padding: 30px;
+            position: relative;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* Header & Info Icon */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            margin: 0;
+            color: var(--primary);
+            font-weight: 800;
+        }
+
+        .info-btn {
+            background: #eff6ff;
+            color: var(--primary);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            border: 1px solid #dbeafe;
+            transition: 0.3s;
+        }
+
+        .info-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Form Elements */
+        .field-group { margin-bottom: 18px; }
+        label { display: block; font-size: 0.85rem; margin-bottom: 8px; color: var(--text-muted); font-weight: 600; }
+        
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #e5e7eb;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Toggle Button */
+        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--primary); }
+        input:checked + .slider:before { transform: translateX(20px); }
+
+        .position-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+
+        .pos-option {
+            border: 1.5px solid #e5e7eb;
+            padding: 8px;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .pos-option.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Generate Button */
+        .btn-generate {
+            width: 100%;
+            padding: 14px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-generate:hover { background: var(--primary-hover); transform: translateY(-2px); }
+
+        /* Result Area */
+        .result-box {
+            margin-top: 25px;
+            background: #111827;
+            color: #10b981;
+            padding: 20px;
+            border-radius: 12px;
+            word-break: break-all;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            text-align: center;
+            min-height: 40px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .result-box::after {
+            content: "برای کپی کلیک کنید";
+            position: absolute;
+            bottom: 5px;
+            right: 10px;
+            font-size: 0.6rem;
+            color: #4b5563;
+        }
+
+        /* Modal / Popup */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-muted);
+        }
+
+        .modal-content h3 { color: var(--primary); margin-top: 0; }
+        .modal-content p { font-size: 0.95rem; line-height: 1.7; color: #444; text-align: justify; }
+        
+        .footer-links {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        .link-btn {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .tg-link { background: #0088cc; color: white; }
+        .dn-link { background: #f59e0b; color: white; }
+
+        .recommendation {
+            background: #fffbeb;
+            border-right: 4px solid #f59e0b;
+            padding: 10px;
+            margin: 15px 0;
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-card">
+    <div class="header">
+        <h1>RWG SZ</h1>
+        <div class="info-btn" onclick="toggleModal(true)">!</div>
+    </div>
+
+    <div class="field-group">
+        <label>تعداد کاراکترهای تصادفی:</label>
+        <input type="number" id="totalLen" value="50">
+    </div>
+
+    <div class="switch-container">
+        <span style="font-size: 0.9rem; font-weight: 600;">استفاده از اعداد (1-9)</span>
+        <label class="switch">
+            <input type="checkbox" id="includeNumbers">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="field-group">
+        <label>عبارت ثابت (برند شخصی):</label>
+        <input type="text" id="customText" placeholder="مثلاً: SeriZ">
+    </div>
+
+    <div class="field-group">
+        <label>محل قرارگیری عبارت ثابت:</label>
+        <div class="position-selector">
+            <div class="pos-option" onclick="setPos('start', this)">اول</div>
+            <div class="pos-option active" onclick="setPos('mid', this)">وسط</div>
+            <div class="pos-option" onclick="setPos('end', this)">آخر</div>
+        </div>
+    </div>
+
+    <button class="btn-generate" onclick="generate()">ساخت رشته امنیتی</button>
+
+    <div class="result-box" id="result" onclick="copyToClipboard()">
+        خروجی اینجا ظاهر می‌شود
+    </div>
+</div>
+
+<!-- Modal Help -->
+<div class="modal" id="helpModal">
+    <div class="modal-content">
+        <span class="close-modal" onclick="toggleModal(false)">&times;</span>
+        <h3>درباره پروژه RWG SZ</h3>
+        <p>
+            درود وقت بخیر، این ابزار تحت عنوان <strong>RWG SZ</strong> جهت تولید رشته‌های متنی تصادفی و غیرقابل پیش‌بینی طراحی شده است. 
+            هدف اصلی این سورس، ارتقای امنیت در پنل‌های مدیریت ترافیک (مانند سنایی) و جلوگیری از حملات Brute-force روی لینک‌های سابسکریپشن و اینباندها می‌باشد.
+        </p>
+        
+        <div class="recommendation">
+            <strong>پیشنهاد فنی:</strong> برای امنیت حداکثری، طول رشته را بین <strong>۴۵ الی ۷۰</strong> کاراکتر تنظیم کنید و نام برند خود را در ابتدا یا وسط قرار دهید.
+        </div>
+
+        <p>حمایت شما از پروژه‌های اوپن‌سورس باعث دلگرمی ماست.</p>
+
+        <div class="footer-links">
+            <a href="https://t.me/iitzSeriZdev" class="link-btn tg-link" target="_blank">کانال تلگرام</a>
+            <a href="https://nowpayments.io/donation/iitzSeriZ" class="link-btn dn-link" target="_blank">حمایت مالی (دونیت)</a>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentPos = 'mid';
+
+    function setPos(pos, el) {
+        currentPos = pos;
+        document.querySelectorAll('.pos-option').forEach(opt => opt.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function toggleModal(show) {
+        document.getElementById('helpModal').style.display = show ? 'flex' : 'none';
+    }
+
+    function generate() {
+        const length = parseInt(document.getElementById('totalLen').value) || 20;
+        const includeNums = document.getElementById('includeNumbers').checked;
+        const customText = document.getElementById('customText').value;
+
+        let charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        if (includeNums) charset += "123456789";
+
+        let randomPart = "";
+        for (let i = 0; i < length; i++) {
+            randomPart += charset.charAt(Math.floor(Math.random() * charset.length));
+        }
+
+        let finalResult = "";
+        if (currentPos === "start") {
+            finalResult = customText + randomPart;
+        } else if (currentPos === "end") {
+            finalResult = randomPart + customText;
+        } else {
+            const mid = Math.floor(randomPart.length / 2);
+            finalResult = randomPart.slice(0, mid) + customText + randomPart.slice(mid);
+        }
+
+        document.getElementById('result').innerText = finalResult;
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('result').innerText;
+        if (text.includes("ظاهر می‌شود")) return;
+        navigator.clipboard.writeText(text);
+        
+        const originalText = document.getElementById('result').innerText;
+        document.getElementById('result').innerText = "کپی شد! ✅";
+        document.getElementById('result').style.color = "#fff";
+        
+        setTimeout(() => {
+            document.getElementById('result').innerText = originalText;
+            document.getElementById('result').style.color = "#10b981";
+        }, 1000);
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('helpModal');
+        if (event.target == modal) toggleModal(false);
+    }
+</script>
+
+</body>
+</html>
